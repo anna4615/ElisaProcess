@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
   <bpmn:message id="Message_0tqdnju" />
   <bpmn:message id="Message_1oioapt" name="Message_0fncguv" />
   <bpmn:message id="Message_1npeev9" />
@@ -15,14 +15,14 @@
       </bpmn:lane>
       <bpmn:lane id="Lane_0zpblka" name="Automatc">
         <bpmn:flowNodeRef>Gateway_07rgh1t</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1g5h63f</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1krkq07</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_0x6ir2l</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1487xdy</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0lg1p9r</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1r3z8dl</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>say-hello</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1g5h63f</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1krkq07</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>say-hello</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="Activity_0bsu5d8" name="Hämta platt-layout">
@@ -40,10 +40,18 @@
     </bpmn:manualTask>
     <bpmn:sequenceFlow id="Flow_1pcvqmo" sourceRef="Activity_1krkq07" targetRef="EndEvent_0x6ir2l" />
     <bpmn:sequenceFlow id="Flow_0jj9gjs" sourceRef="Activity_0uwkav5" targetRef="Event_0lg1p9r" />
-    <bpmn:sequenceFlow id="Flow_1wimoeo" name="Nej" sourceRef="Gateway_07rgh1t" targetRef="Activity_1krkq07" />
-    <bpmn:sequenceFlow id="Flow_10cvk8j" name="Ja" sourceRef="Gateway_07rgh1t" targetRef="Activity_0uwkav5" />
-    <bpmn:sequenceFlow id="Flow_1lzto5b" name="Nej" sourceRef="Gateway_1487xdy" targetRef="Gateway_07rgh1t" />
-    <bpmn:sequenceFlow id="Flow_1kvh7fa" name="Ja" sourceRef="Gateway_1487xdy" targetRef="Activity_1g5h63f" />
+    <bpmn:sequenceFlow id="Flow_1wimoeo" name="Nej" sourceRef="Gateway_07rgh1t" targetRef="Activity_1krkq07">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not redo}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_10cvk8j" name="Ja" sourceRef="Gateway_07rgh1t" targetRef="Activity_0uwkav5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{redo}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1lzto5b" name="Nej" sourceRef="Gateway_1487xdy" targetRef="Gateway_07rgh1t">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not experimentOk}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1kvh7fa" name="Ja" sourceRef="Gateway_1487xdy" targetRef="Activity_1g5h63f">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{experimentOk}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0lrwwwg" sourceRef="Activity_1y8ssxm" targetRef="Gateway_1487xdy" />
     <bpmn:sequenceFlow id="Flow_1pu3e1e" sourceRef="Activity_1g5h63f" targetRef="EndEvent_0x6ir2l" />
     <bpmn:sequenceFlow id="Flow_0k7zttn" sourceRef="Activity_1r3z8dl" targetRef="Activity_1y8ssxm" />
@@ -56,14 +64,6 @@
       <bpmn:outgoing>Flow_10cvk8j</bpmn:outgoing>
       <bpmn:outgoing>Flow_1wimoeo</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1g5h63f" name="Spara provernas koncentration + status &#34;Done&#34;">
-      <bpmn:incoming>Flow_1kvh7fa</bpmn:incoming>
-      <bpmn:outgoing>Flow_1pu3e1e</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1krkq07" name="Spara status &#34;Fail&#34; för proverna">
-      <bpmn:incoming>Flow_1wimoeo</bpmn:incoming>
-      <bpmn:outgoing>Flow_1pcvqmo</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent_0x6ir2l" name="ELISA avslutad">
       <bpmn:incoming>Flow_1pu3e1e</bpmn:incoming>
       <bpmn:incoming>Flow_1pcvqmo</bpmn:incoming>
@@ -74,25 +74,29 @@
       <bpmn:outgoing>Flow_1lzto5b</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:intermediateCatchEvent id="Event_0lg1p9r" name="Data mottaget">
-      <bpmn:extensionElements>
-        <camunda:executionListener class="" event="start" />
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0jj9gjs</bpmn:incoming>
       <bpmn:outgoing>Flow_1gfwaky</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0u8wcyd" messageRef="Message_1sjf6nz" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_1r3z8dl" name="Beräkna koncentrationer">
+    <bpmn:task id="Activity_1r3z8dl" name="Beräkna koncentrationer">
       <bpmn:incoming>Flow_1gfwaky</bpmn:incoming>
       <bpmn:outgoing>Flow_0k7zttn</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="say-hello" name="Placera prover och standarder på prov platta">
+    </bpmn:task>
+    <bpmn:task id="Activity_1g5h63f" name="Spara provernas koncentration + status &#34;Done&#34;">
+      <bpmn:incoming>Flow_1kvh7fa</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pu3e1e</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_1krkq07" name="Spara status &#34;Fail&#34; för proverna">
+      <bpmn:incoming>Flow_1wimoeo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pcvqmo</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:startEvent id="StartEvent_1" name="ELISA startad med utvalda prover">
+      <bpmn:outgoing>SequenceFlow_1fp17al</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="say-hello" name="Placera prover och standarder på prov platta" camunda:delegateExpression="${PlateMaker}">
       <bpmn:incoming>SequenceFlow_1fp17al</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_16gzt2m</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:startEvent id="StartEvent_1" name="ELISA startad med utvalda prover">
-      <bpmn:outgoing>SequenceFlow_1fp17al</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0mhzeik" messageRef="Message_1iu8uh5" />
-    </bpmn:startEvent>
     <bpmn:textAnnotation id="TextAnnotation_03wgwrb">
       <bpmn:text>API anrop till microtjänst Data Access</bpmn:text>
     </bpmn:textAnnotation>
@@ -211,12 +215,6 @@
           <dc:Bounds x="1215" y="586" width="70" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12v18ys_di" bpmnElement="Activity_1g5h63f">
-        <dc:Bounds x="1380" y="360" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1qb75nl_di" bpmnElement="Activity_1krkq07">
-        <dc:Bounds x="1380" y="510" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_13dp7if_di" bpmnElement="EndEvent_0x6ir2l">
         <dc:Bounds x="1552" y="382" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -235,18 +233,6 @@
           <dc:Bounds x="804" y="458" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1hmw5ds_di" bpmnElement="Activity_1r3z8dl">
-        <dc:Bounds x="910" y="390" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ddfo9r_di" bpmnElement="say-hello">
-        <dc:Bounds x="350" y="390" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0s368sg_di" bpmnElement="StartEvent_1">
-        <dc:Bounds x="262" y="412" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="246" y="369" width="68" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_03wgwrb_di" bpmnElement="TextAnnotation_03wgwrb">
         <dc:Bounds x="1500" y="577" width="100" height="54" />
       </bpmndi:BPMNShape>
@@ -258,6 +244,24 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0vx8tb8_di" bpmnElement="TextAnnotation_0vx8tb8">
         <dc:Bounds x="270" y="550" width="100" height="54" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gvz6mx_di" bpmnElement="Activity_1r3z8dl">
+        <dc:Bounds x="910" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h5b7ni_di" bpmnElement="Activity_1g5h63f">
+        <dc:Bounds x="1380" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1uhjkrp_di" bpmnElement="Activity_1krkq07">
+        <dc:Bounds x="1380" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18t74kj_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="262" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="246" y="369" width="68" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uhbdtc_di" bpmnElement="say-hello">
+        <dc:Bounds x="350" y="390" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0gg09kk_di" bpmnElement="Association_0gg09kk">
         <di:waypoint x="1455" y="440" />
