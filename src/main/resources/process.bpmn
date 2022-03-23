@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
-  <bpmn:message id="Message_0tqdnju" name="Message_0cjmhr1" />
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <bpmn:message id="Message_0tqdnju" />
   <bpmn:message id="Message_1oioapt" name="Message_0fncguv" />
   <bpmn:message id="Message_1npeev9" />
   <bpmn:collaboration id="Collaboration_12sgdzk">
@@ -74,9 +74,12 @@
       <bpmn:outgoing>Flow_1lzto5b</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:intermediateCatchEvent id="Event_0lg1p9r" name="Data mottaget">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="" event="start" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0jj9gjs</bpmn:incoming>
       <bpmn:outgoing>Flow_1gfwaky</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0u8wcyd" messageRef="Message_1npeev9" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0u8wcyd" messageRef="Message_1sjf6nz" />
     </bpmn:intermediateCatchEvent>
     <bpmn:serviceTask id="Activity_1r3z8dl" name="Beräkna koncentrationer">
       <bpmn:incoming>Flow_1gfwaky</bpmn:incoming>
@@ -88,7 +91,7 @@
     </bpmn:serviceTask>
     <bpmn:startEvent id="StartEvent_1" name="ELISA startad med utvalda prover">
       <bpmn:outgoing>SequenceFlow_1fp17al</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0mhzeik" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0mhzeik" messageRef="Message_1iu8uh5" />
     </bpmn:startEvent>
     <bpmn:textAnnotation id="TextAnnotation_03wgwrb">
       <bpmn:text>API anrop till microtjänst Data Access</bpmn:text>
@@ -108,6 +111,8 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1jea046" sourceRef="StartEvent_1" targetRef="TextAnnotation_0vx8tb8" />
   </bpmn:process>
+  <bpmn:message id="Message_1sjf6nz" name="Message_05o697i" />
+  <bpmn:message id="Message_1iu8uh5" name="Message_05e8f1h" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_12sgdzk">
       <bpmndi:BPMNShape id="Participant_1r9q6b2_di" bpmnElement="Participant_1r9q6b2" isHorizontal="true">
@@ -118,18 +123,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_005qk13_di" bpmnElement="Lane_005qk13" isHorizontal="true">
         <dc:Bounds x="190" y="80" width="1429" height="214" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_03wgwrb_di" bpmnElement="TextAnnotation_03wgwrb">
-        <dc:Bounds x="1500" y="577" width="100" height="54" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0p4pmpx_di" bpmnElement="TextAnnotation_0p4pmpx">
-        <dc:Bounds x="950" y="570" width="100" height="68" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0cevzb4_di" bpmnElement="TextAnnotation_0cevzb4">
-        <dc:Bounds x="640" y="577" width="200" height="68" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0vx8tb8_di" bpmnElement="TextAnnotation_0vx8tb8">
-        <dc:Bounds x="320" y="577" width="100" height="54" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_07i1jie_di" bpmnElement="Flow_07i1jie">
         <di:waypoint x="630" y="180" />
@@ -254,6 +247,18 @@
           <dc:Bounds x="246" y="369" width="68" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03wgwrb_di" bpmnElement="TextAnnotation_03wgwrb">
+        <dc:Bounds x="1500" y="577" width="100" height="54" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0p4pmpx_di" bpmnElement="TextAnnotation_0p4pmpx">
+        <dc:Bounds x="950" y="570" width="100" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0cevzb4_di" bpmnElement="TextAnnotation_0cevzb4">
+        <dc:Bounds x="640" y="577" width="200" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0vx8tb8_di" bpmnElement="TextAnnotation_0vx8tb8">
+        <dc:Bounds x="270" y="550" width="100" height="54" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0gg09kk_di" bpmnElement="Association_0gg09kk">
         <di:waypoint x="1455" y="440" />
         <di:waypoint x="1541" y="577" />
@@ -271,8 +276,8 @@
         <di:waypoint x="704" y="577" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1jea046_di" bpmnElement="Association_1jea046">
-        <di:waypoint x="289" y="446" />
-        <di:waypoint x="362" y="577" />
+        <di:waypoint x="285" y="447" />
+        <di:waypoint x="316" y="550" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
