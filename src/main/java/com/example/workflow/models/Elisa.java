@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Elisa implements Serializable{
 
     private String id;
-    private ArrayList<Sample> samples;
+    private ArrayList<Test> tests;
     private String status;
 
-    public Elisa(/*String id,*/ ArrayList<Sample> samples) {
+    public Elisa(/*String id, ArrayList<Sample> samples*/) {
         //this.id = id;
-        this.samples = samples;
-        status = "In progress";
+        //this.samples = samples;
+        //status = "In progress";
     }
 
     public String getId() {
@@ -23,7 +23,11 @@ public class Elisa implements Serializable{
         this.id = id;
     }
 
-    public ArrayList<Sample> getSamples() {
-        return samples;
+    public ArrayList<Test> getTests() {
+        return tests;
+    }
+
+    public void setTests(ArrayList<Test> tests) {
+        this.tests = tests;
     }
 }
