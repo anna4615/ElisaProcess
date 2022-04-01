@@ -28,25 +28,31 @@ public class ExperimentInitializer implements  JavaDelegate{
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
-        int elisaId = CreateElisa();
+        int elisaId = createElisa();
         execution.setVariable("ElisaId", elisaId);
 
         String sampleString = (String) execution.getVariable("samples");
-        String[] sampleIds = sampleString.split(";");
+        String[] sampleIdsString = sampleString.split(";");
+        Integer[] sampleIds = new Integer[sampleIdsString.length];
+
+        for (int i = 0; i < sampleIds.length; i++) {
+            sampleIds[i] = Integer.parseInt(sampleIdsString[i]);
+        }
 
         //TODO: felhantering om fler än 72 prover, dvs sampleIds.length > 72
 
         ArrayList<Test> tests = new ArrayList<Test>();
-        int position = 0;
+        int position = 1;
 
         for (int i = 0; i < sampleIds.length; i++) {
-            Test test = new Test(sampleIds[i], elisaId, ++position);
+            Test test = createTest(sampleIds[i], elisaId, position);
             tests.add(test);
+            position++;
         }
     }
 
 
-    private int CreateElisa() throws IOException, InterruptedException {
+    private int createElisa() throws IOException, InterruptedException {
 
         String query = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\\n\"}";
 
@@ -66,5 +72,32 @@ public class ExperimentInitializer implements  JavaDelegate{
                 .getInt("id");
 
         return id;
+    }
+
+    private Test createTest(int sampleIdInt, int elisaIdInt, int positionInt) throws IOException, InterruptedException {
+
+        String sampleId = Integer.toString(sampleIdInt);
+        String elisaId = Integer.toString(elisaIdInt);
+        String position = Integer.toString(positionInt);
+
+        String query2 = "{\"query\":\"mutation{addTest(input:{sampleId:1,elisaId:2,elisaPlatePosition:1}){test{id,sampleId,elisaId,elisaPlatePosition}}}\"}";
+        String query = "{\"query\":\"mutation{addTest(input:{sampleId:" + sampleId + ",elisaId:" + elisaId + ",elisaPlatePosition:" + position + "}){test{id,sampleId,elisaId,elisaPlatePosition}}}\"}";
+
+        HttpRequest addTest = HttpRequest.newBuilder()
+                .uri(URI.create(LIMS_API_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(query))
+                .build();
+
+        HttpResponse<String> mutationResponse = client.send(addTest, HttpResponse.BodyHandlers.ofString());
+
+        JSONObject responseJson = new JSONObject(mutationResponse.body());
+
+        //TODO: ändra till id från db
+        int id = 1;
+
+        Test test = new Test(id, sampleIdInt, elisaIdInt, positionInt);
+
+        return test;
     }
 }
