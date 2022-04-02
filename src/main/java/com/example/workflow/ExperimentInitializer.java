@@ -3,6 +3,7 @@ package com.example.workflow;
 import com.example.workflow.models.Elisa;
 import com.example.workflow.models.*;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.json.UTF8DataInputJsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,14 +76,12 @@ public class ExperimentInitializer implements  JavaDelegate{
         return id;
     }
 
-    private Test createTest(int sampleIdInt, int elisaIdInt, int positionInt) throws IOException, InterruptedException {
+    private Test createTest(int sampleId, int elisaId, int position) throws IOException, InterruptedException {
 
-        String sampleId = Integer.toString(sampleIdInt);
-        String elisaId = Integer.toString(elisaIdInt);
-        String position = Integer.toString(positionInt);
-
-        String query2 = "{\"query\":\"mutation{addTest(input:{sampleId:1,elisaId:2,elisaPlatePosition:1}){test{id,sampleId,elisaId,elisaPlatePosition}}}\"}";
-        String query = "{\"query\":\"mutation{addTest(input:{sampleId:" + sampleId + ",elisaId:" + elisaId + ",elisaPlatePosition:" + position + "}){test{id,sampleId,elisaId,elisaPlatePosition}}}\"}";
+        String query = "{\"query\":\"mutation{addTest(input:{sampleId:" + sampleId +
+                                                            ",elisaId:" + elisaId +
+                                                            ",elisaPlatePosition:" + position +
+                                                            "}){test{id,sampleId,elisaId,elisaPlatePosition}}}\"}";
 
         HttpRequest addTest = HttpRequest.newBuilder()
                 .uri(URI.create(LIMS_API_URL))
@@ -96,7 +96,7 @@ public class ExperimentInitializer implements  JavaDelegate{
         //TODO: ändra till id från db
         int id = 1;
 
-        Test test = new Test(id, sampleIdInt, elisaIdInt, positionInt);
+        Test test = new Test(id, sampleId, elisaId, position);
 
         return test;
     }
