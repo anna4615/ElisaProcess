@@ -2,19 +2,29 @@ package com.example.workflow.models;
 
 public class Sample {
 
-    private int testId;
-    private double concentration;
+    private int id;
+    private String name;
+    //private double concentration;
 
-    public Sample() {
-
+    public Sample(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public double getConcentration() {
-        return concentration;
+    public int getId() {
+        return id;
     }
 
-    public void setConcentration(double concentration) {
-        this.concentration = concentration;
+    public String getName() {
+        return name;
     }
+
+//    public double getConcentration() {
+//        return concentration;
+//    }
+//
+//    public void setConcentration(double concentration) {
+//        this.concentration = concentration;
+//    }
 
 }

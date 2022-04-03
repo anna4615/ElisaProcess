@@ -1,19 +1,31 @@
 package com.example.workflow.models;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Locale;
+
 public class Test {
 
     private int id;
     private int sampleId;
     private int elisaId;
+    private String sampleName;
     private double measuredValue;
     private double concentration;
     private int platePosition;
     private String status;
 
-    public Test(int id, int sampleId, int elisaId, int platePosition) {
+
+    public Test(int id, int sampleId, String sampleName, int elisaId, int platePosition,
+                String status) {
+        this.id = id;
         this.sampleId = sampleId;
+        this.sampleName = sampleName;
         this.elisaId = elisaId;
         this.platePosition = platePosition;
+        this.status = status;
     }
 
 
