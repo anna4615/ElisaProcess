@@ -68,9 +68,17 @@ public class Test {
         return elisaId;
     }
 
+//    public void setPlatePosition(int platePosition) {
+//        this.platePosition = platePosition;
+//    }
+
     public int getPlatePosition() {
         return platePosition;
     }
+
+//    public void setSampleName(String sampleName) {
+//        this.sampleName = sampleName;
+//    }
 
     public String getSampleName() {
         return sampleName;

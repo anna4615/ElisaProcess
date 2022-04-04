@@ -1,5 +1,8 @@
 package com.example.workflow;
 import com.example.workflow.models.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
@@ -94,6 +97,13 @@ public class ExperimentInitializer implements  JavaDelegate{
                 .getJSONObject("data")
                 .getJSONObject("addTest")
                 .getJSONObject("test");
+
+//        //Så här hade man kunnat göra men det blir mer kod och jag tycker det är bättre säkerhet att sätta alla värden i
+//        //konstruktorn och ta bort alla setters
+//        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//        Test test2 = objectMapper.readValue(testJson.toString(), new TypeReference<>() {});
+//        test2.setPlatePosition(position);
+//        test2.setSampleName(sampleName);
 
         int id = testJson.getInt("id");
         String status = testJson.getString("status");
