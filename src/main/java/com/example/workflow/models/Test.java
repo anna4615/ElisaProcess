@@ -17,6 +17,8 @@ public class Test {
     private int platePosition;
     private String status;
 
+    public Test() {
+    }
 
     public Test(int id, int sampleId, String sampleName, int elisaId, int platePosition,
                 String status) {
@@ -70,5 +72,7 @@ public class Test {
         return platePosition;
     }
 
-
+    public String getSampleName() {
+        return sampleName;
+    }
 }

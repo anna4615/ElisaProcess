@@ -2,9 +2,6 @@ package com.example.workflow;
 import com.example.workflow.models.*;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.spin.Spin;
-import org.camunda.spin.SpinList;
-import org.camunda.spin.json.SpinJsonNode;
 import org.springframework.stereotype.Component;
 import org.json.*;
 import java.io.IOException;
@@ -30,6 +27,7 @@ public class ExperimentInitializer implements  JavaDelegate{
         elisaId = createElisa();
         execution.setVariable("ElisaId", elisaId);
 
+        //String s = (String) execution.getVariable("samples");
         String[] samplesInput = ((String) execution.getVariable("samples")).split(";");
         //TODO: felhantering om fler än 72 prover, dvs samplesInput.length > 72
 
