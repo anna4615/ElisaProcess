@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.springframework.stereotype.Component;
 import org.json.*;
 import java.io.IOException;
@@ -20,7 +22,8 @@ import static org.camunda.spin.Spin.*;
 @Component("ExperimentInitializer")
 public class ExperimentInitializer implements  JavaDelegate{
 
-    private static final String LIMS_API_URL = "http://localhost:3627/graphql";
+    //private static final String LIMS_API_URL = "http://localhost:3627/graphql";
+    private static final String LIMS_API_URL = "http://localhost:5000/graphql/";
     private HttpClient client = HttpClient.newHttpClient();
     private int elisaId;
 
@@ -85,13 +88,13 @@ public class ExperimentInitializer implements  JavaDelegate{
                                                             ",elisaPlatePosition:" + position +
                                                             "}){test{id,sampleId,elisaId,elisaPlatePosition,status,dateAdded}}}\"}";
 
-        HttpRequest addTest = HttpRequest.newBuilder()
+        HttpRequest addTest2 = HttpRequest.newBuilder()
                 .uri(URI.create(LIMS_API_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(query))
                 .build();
 
-        HttpResponse<String> mutationResponse = client.send(addTest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> mutationResponse = client.send(addTest2, HttpResponse.BodyHandlers.ofString());
 
         JSONObject testJson = new JSONObject(mutationResponse.body())
                 .getJSONObject("data")
