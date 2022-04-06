@@ -6,6 +6,9 @@ public class Well {
     private String wellName;
     private String reagent;
 
+    public Well() {
+    }
+
     public Well(int pos, String wellName/*, String reagent*/) {
         this.pos = pos;
         this.wellName = wellName;

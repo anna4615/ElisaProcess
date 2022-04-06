@@ -7,6 +7,9 @@ public class Plate {
     private int elisaId;
     private ArrayList<Well> wells;
 
+    public Plate() {
+    }
+
     public Plate(int elisaId, ArrayList<Test> tests) {
         this.elisaId = elisaId;
         wells = new ArrayList<Well>();
