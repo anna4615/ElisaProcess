@@ -1,7 +1,6 @@
 package com.example.workflow;
 
-import com.example.workflow.models.Plate;
-import com.example.workflow.models.Test;
+import com.example.workflow.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -12,6 +11,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.List;
 
 import static org.camunda.spin.Spin.JSON;
@@ -20,7 +21,30 @@ import static org.camunda.spin.Spin.JSON;
 public class Application {
 
   public static void main(String... args) throws JsonProcessingException {
-    SpringApplication.run(Application.class, args);
+    //SpringApplication.run(Application.class, args);
+
+//    String resultVariable = "{\"pos\":1,\"value\":0.45};{\"pos\":2,\"value\":1.02};{\"pos\":73,\"value\":0.11};{\"pos\":74,\"value\":0.165};{\"pos\":75,\"value\":0.247};{\"pos\":76,\"value\":0.371};{\"pos\":77,\"value\":0.556};{\"pos\":78,\"value\":0.835};{\"pos\":79,\"value\":1.252};{\"pos\":80,\"value\":1.879};{\"pos\":81,\"value\":0.12};{\"pos\":82,\"value\":0.175};{\"pos\":83,\"value\":0.257};{\"pos\":84,\"value\":0.381};{\"pos\":85,\"value\":0.566};{\"pos\":86,\"value\":0.845};{\"pos\":87,\"value\":1.262};{\"pos\":88,\"value\":1.889};{\"pos\":89,\"value\":0.09};{\"pos\":90,\"value\":0.145};{\"pos\":91,\"value\":0.227};{\"pos\":92,\"value\":0.351};{\"pos\":93,\"value\":0.536};{\"pos\":94,\"value\":0.815};{\"pos\":95,\"value\":1.232};{\"pos\":96,\"value\":1.859}";
+//    String[] resultsArray = resultVariable.split(";");
+
+    //TODO: mappa input från instrument till ArrayList<RawData>
+    //ArrayList<RawData> rawDatas = new ArrayList<RawData>();
+    StandardCurve stdCurve = new StandardCurve();
+
+   // stdCurve.setStdDatas(new ArrayList<StandardData>());
+
+
+//    for(String result : resultsArray){
+//      JSONObject resultJson = new JSONObject(result);
+//      results.put(resultJson.getInt("pos"), resultJson.getDouble("value"));
+
+    //TODO: results skall hämtas från variabel standardData i processen
+
+
+    //calculateStandard(stdConcentrations, standardResults);
+
+  }
+
+
 
 //
 //      String testsVariable = "[{\"id\":138,\"sampleId\":3,\"elisaId\":100,\"sampleName\":\"Prov3\",\"measuredValue\":0.0,\"concentration\":0.0,\"platePosition\":1,\"status\":\"In Progress\"},{\"id\":139,\"sampleId\":4,\"elisaId\":100,\"sampleName\":\"Prov4\",\"measuredValue\":0.0,\"concentration\":0.0,\"platePosition\":2,\"status\":\"In Progress\"}]";
@@ -33,7 +57,19 @@ public class Application {
 //
 //      var t = tests2.value();
 
+
+
+  private static void calculateAverageOfTriplicates(ArrayList<Double> stdConcentrations, HashMap<Integer, Double> standardResults) {
+
+    //StandardCurve stdCurve = new StandardCurve();
+
+
+
+    //return stdCurve;
   }
 
 
+
 }
+
+

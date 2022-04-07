@@ -1,10 +1,7 @@
 package com.example.workflow;
 
 
-import com.example.workflow.models.Elisa;
-import com.example.workflow.models.Plate;
-import com.example.workflow.models.Sample;
-import com.example.workflow.models.Test;
+import com.example.workflow.models.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +30,28 @@ public class PlateMaker implements JavaDelegate {
         ArrayList<Test> tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
 
         Plate plate = new Plate(elisaId, tests);
-        execution.setVariable("plate", plate);
+
+//        //kan inte hanteras av tasklist men kanske kan användas ssenare
+//        // i processen om man använder eget UI
+//        ObjectValue plateValue = Variables.objectValue(plate)
+//                .serializationDataFormat(Variables.SerializationDataFormats.JAVA)
+//                .create();
+//
+//
+ //       execution.setVariable("plate", plateValue);
+
+        //TODO: skickas till UI
+        ObjectValue plateValue = Variables.objectValue(plate)
+                .serializationDataFormat(Variables.SerializationDataFormats.JSON)
+                .create();
+
+        execution.setVariable("plate", plateValue);
+
+
+//        //funkar inte -> value to long
+//        ArrayList<Well> wellList = plate.getWells();
+//        String wells = JSON(wellList).toString();
+//        execution.setVariable("wells", wells);
 
     }
 }

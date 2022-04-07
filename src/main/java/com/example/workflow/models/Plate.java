@@ -1,8 +1,9 @@
 package com.example.workflow.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Plate {
+public class Plate implements Serializable {
 
     private int elisaId;
     private ArrayList<Well> wells;

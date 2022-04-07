@@ -8,20 +8,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Component("ResultCalculator")
 public class ResultCalculator implements JavaDelegate {
+
+    private ArrayList<Test> tests;
+    private HashMap<Integer, Double> results;
+
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
+
         String testsVariable = execution.getVariable("tests").toString();
 
-        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        ArrayList<Test> tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
+        results = new HashMap<Integer, Double>();
 
+
+
+        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
 
     }
+
+
+
 }

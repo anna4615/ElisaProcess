@@ -1,12 +1,14 @@
 package com.example.workflow.models;
 
-public class Well {
+import java.io.Serializable;
+
+public class Well implements Serializable {
 
     private int pos;
     private String wellName;
     private String reagent;
 
-    public Well() {
+    public Well(){
     }
 
     public Well(int pos, String wellName/*, String reagent*/) {

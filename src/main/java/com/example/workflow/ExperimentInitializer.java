@@ -38,9 +38,9 @@ public class ExperimentInitializer implements  JavaDelegate{
         //TODO: felhantering om fler än 72 prover, dvs samplesInput.length > 72
 
         ArrayList<Test> testList = createTestList(samplesInput);
-
         String tests = JSON(testList).toString();
         execution.setVariable("tests", tests);
+
     }
 
 
