@@ -1,7 +1,5 @@
 package com.example.workflow.models;
 
-import java.util.HashMap;
-
 public class StandardCurve {
 
     StandardData[] stdDatas;
@@ -14,10 +12,10 @@ public class StandardCurve {
         this.stdDatas = new StandardData[24];
         this.concentrations =  new double[8];
         this.aveValues = new double[8];
-        getTestData();
+        //TODO: värden för standard-kurvan skall kommma från instrumentet -> ta bort setTestStd
+        setTestStd();
         calculateAverages();
-        setK();
-        setM();
+        setKAndM();
     }
 
     public StandardData[] getStdDatas() {
@@ -28,32 +26,24 @@ public class StandardCurve {
         return k;
     }
 
-    public void setK() {
-
+    // y = kx + m -> conc = k*value + m
+    // k = delta y / delta x -> k = delta conc / delta value
+    // m = conc - k*value
+    // beräknar k och m för vardera steg i std-kurvan, tar sedan medelvärdet
+    public void setKAndM() {
+        double tempK = 0.0;
         for (int i = 0; i < 7; i++) {
             double deltaConc = concentrations[i + 1] - concentrations[i];
             double deltaValue = aveValues[i + 1] - aveValues[i];
-            k+= (deltaConc / deltaValue);
+            tempK = (deltaConc / deltaValue);            k+= tempK;
+            m+= concentrations[i] - (tempK * aveValues[i]);
         }
         k /= 7;
+        m /= 7;
     }
 
     public double getM() {
         return m;
-    }
-
-    public void setM() {
-
-        for (int i = 0; i < 8; i++) {
-//            double c = concentrations[i];
-//            double v = aveValues[i];
-//            double kTimesv = k * v;
-//            m = c -kTimesv;
-
-            m+= ((concentrations[i]) - (k * aveValues[i]));
-        }
-
-        m /= 8;
     }
 
 
@@ -70,20 +60,17 @@ public class StandardCurve {
     }
 
 
-    private void getTestData(){
+    private void setTestStd(){
         int pos = 0;
-        for (int i = 0; i < 3; i++) {
-            double conc = 100.0;
-            double value = 0.1 + (i * 0.01);
-            for (int j = 0; j < 8; j++) {
-                stdDatas[pos] = new StandardData(conc, value);
-                value *= 1.5;
-                conc *= 1.5;
-                pos++;
-            }
+        double conc = 2.0;
+        double value = 0.11;
+        for (int j = 0; j < 8; j++) {
+            stdDatas[pos] = new StandardData(conc, value);
+            stdDatas[pos+8] = new StandardData(conc, value + 0.01);
+            stdDatas[pos+16] = new StandardData(conc, value - 0.03);
+            value *= 1.5;
+            conc *= 1.5;
+            pos++;
         }
     }
-
-
-
 }
