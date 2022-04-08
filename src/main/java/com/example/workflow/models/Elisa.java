@@ -5,21 +5,18 @@ import java.util.ArrayList;
 
 public class Elisa implements Serializable{
 
-    private String id;
+    private int id;
     private ArrayList<Test> tests;
     private String status;
 
-    public Elisa(/*String id, ArrayList<Sample> samples*/) {
-        //this.id = id;
-        //this.samples = samples;
-        //status = "In progress";
+    public Elisa() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -31,7 +31,7 @@ public class ExperimentInitializer implements  JavaDelegate{
     public void execute(DelegateExecution execution) throws Exception {
 
         elisaId = createElisa();
-        execution.setVariable("ElisaId", elisaId);
+        execution.setVariable("elisaId", elisaId);
 
         //String s = (String) execution.getVariable("samples");
         String[] samplesInput = ((String) execution.getVariable("samples")).split(";");

@@ -12,8 +12,8 @@ public class Test {
     private int sampleId;
     private int elisaId;
     private String sampleName;
-    private double measuredValue;
-    private double concentration;
+    private float measuredValue;
+    private float concentration;
     private int platePosition;
     private String status;
 
@@ -40,7 +40,7 @@ public class Test {
         return measuredValue;
     }
 
-    public void setMeasuredValue(double measuredValue) {
+    public void setMeasuredValue(float measuredValue) {
         this.measuredValue = measuredValue;
     }
 
@@ -48,7 +48,7 @@ public class Test {
         return concentration;
     }
 
-    public void setConcentration(double concentration) {
+    public void setConcentration(float concentration) {
         this.concentration = concentration;
     }
 

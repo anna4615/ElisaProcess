@@ -3,18 +3,16 @@ package com.example.workflow.models;
 public class StandardCurve {
 
     StandardData[] stdDatas;
-    double[] concentrations;
-    double[] aveValues;
-    private double k;
-    private double m;
+    float[] concentrations;
+    float[] aveMeasValues;
+    private float k;
+    private float m;
 
-    public StandardCurve() {
-        this.stdDatas = new StandardData[24];
-        this.concentrations =  new double[8];
-        this.aveValues = new double[8];
-        //TODO: värden för standard-kurvan skall kommma från instrumentet -> ta bort setTestStd
-        setTestStd();
-        calculateAverages();
+    public StandardCurve(StandardData[] stdDatas) {
+        this.stdDatas = stdDatas;
+        this.concentrations =  new float[8];
+        this.aveMeasValues = new float[8];
+        calculateAverageMeasValues();
         setKAndM();
     }
 
@@ -22,7 +20,7 @@ public class StandardCurve {
         return stdDatas;
     }
 
-    public double getK() {
+    public float getK() {
         return k;
     }
 
@@ -31,12 +29,13 @@ public class StandardCurve {
     // m = conc - k*value
     // beräknar k och m för vardera steg i std-kurvan, tar sedan medelvärdet
     public void setKAndM() {
-        double tempK = 0.0;
+        float tempK = 0.0F;
         for (int i = 0; i < 7; i++) {
-            double deltaConc = concentrations[i + 1] - concentrations[i];
-            double deltaValue = aveValues[i + 1] - aveValues[i];
-            tempK = (deltaConc / deltaValue);            k+= tempK;
-            m+= concentrations[i] - (tempK * aveValues[i]);
+            float deltaConc = concentrations[i + 1] - concentrations[i];
+            float deltaValue = aveMeasValues[i + 1] - aveMeasValues[i];
+            tempK = (deltaConc / deltaValue);
+            k+= tempK;
+            m+= concentrations[i] - (tempK * aveMeasValues[i]);
         }
         k /= 7;
         m /= 7;
@@ -47,30 +46,37 @@ public class StandardCurve {
     }
 
 
-    public void calculateAverages(){
+    public void calculateAverageMeasValues(){
 
         for (int i = 0; i < 8; i++) {
-            double value1 = stdDatas[i].getValue();
-            double value2 = stdDatas[i + 8].getValue();
-            double value3 = stdDatas[i + 16].getValue();
-            double average = (value1 + value2 + value3) / 3;
-            aveValues[i] = average;
+            float value1 = stdDatas[i].getMeasValue();
+            float value2 = stdDatas[i + 8].getMeasValue();
+            float value3 = stdDatas[i + 16].getMeasValue();
+            float average = (value1 + value2 + value3) / 3;
+            aveMeasValues[i] = average;
             concentrations[i] = stdDatas[i].getConcentration();
         }
     }
 
+    // y = kx + m -> conc = k*value + m
+    public float calculateConc(float measValue){
 
-    private void setTestStd(){
-        int pos = 0;
-        double conc = 2.0;
-        double value = 0.11;
-        for (int j = 0; j < 8; j++) {
-            stdDatas[pos] = new StandardData(conc, value);
-            stdDatas[pos+8] = new StandardData(conc, value + 0.01);
-            stdDatas[pos+16] = new StandardData(conc, value - 0.03);
-            value *= 1.5;
-            conc *= 1.5;
-            pos++;
-        }
+        float conc = (k * measValue) + m;
+        return conc;
     }
+
+
+//    private void setTestStd(){
+//        int pos = 0;
+//        float conc = 2.0F;
+//        float value = (float) 0.11;
+//        for (int j = 0; j < 8; j++) {
+//            stdDatas[pos] = new StandardData(pos, conc, value);
+//            stdDatas[pos+8] = new StandardData(pos, conc, (value + 0.01F));
+//            stdDatas[pos+16] = new StandardData(pos, conc, (value - 0.03F));
+//            value *= 1.5;
+//            conc *= 1.5;
+//            pos++;
+//        }
+//    }
 }

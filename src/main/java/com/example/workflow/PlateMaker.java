@@ -24,21 +24,12 @@ public class PlateMaker implements JavaDelegate {
         //String testsVariable = "[{\"id\":138,\"sampleId\":3,\"elisaId\":100,\"sampleName\":\"Prov3\",\"measuredValue\":0.0,\"concentration\":0.0,\"platePosition\":1,\"status\":\"In Progress\"},{\"id\":139,\"sampleId\":4,\"elisaId\":100,\"sampleName\":\"Prov4\",\"measuredValue\":0.0,\"concentration\":0.0,\"platePosition\":2,\"status\":\"In Progress\"}]";
 
         String testsVariable = execution.getVariable("tests").toString();
-        int elisaId = Integer.parseInt(execution.getVariable("ElisaId").toString());
+        int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
 
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ArrayList<Test> tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
 
         Plate plate = new Plate(elisaId, tests);
-
-//        //kan inte hanteras av tasklist men kanske kan användas ssenare
-//        // i processen om man använder eget UI
-//        ObjectValue plateValue = Variables.objectValue(plate)
-//                .serializationDataFormat(Variables.SerializationDataFormats.JAVA)
-//                .create();
-//
-//
- //       execution.setVariable("plate", plateValue);
 
         //TODO: skickas till UI
         ObjectValue plateValue = Variables.objectValue(plate)
@@ -46,12 +37,5 @@ public class PlateMaker implements JavaDelegate {
                 .create();
 
         execution.setVariable("plate", plateValue);
-
-
-//        //funkar inte -> value to long
-//        ArrayList<Well> wellList = plate.getWells();
-//        String wells = JSON(wellList).toString();
-//        execution.setVariable("wells", wells);
-
     }
 }

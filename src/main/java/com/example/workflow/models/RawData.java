@@ -4,12 +4,12 @@ public class RawData {
 
     private final int position;
     private final String reagent;
-    private final double value;
+    private final float measValue;
 
-    public RawData(int position, String reagent, double value) {
+    public RawData(int position, String reagent, float value) {
         this.position = position;
         this.reagent = reagent;
-        this.value = value;
+        this.measValue = value;
     }
 
     public int getPosition() {
@@ -20,7 +20,7 @@ public class RawData {
         return reagent;
     }
 
-    public double getValue() {
-        return value;
+    public double getMeasValue() {
+        return measValue;
     }
 }
