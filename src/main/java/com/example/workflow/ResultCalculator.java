@@ -20,7 +20,6 @@ import java.util.HashMap;
 public class ResultCalculator implements JavaDelegate {
 
     private ArrayList<Test> tests;
-    private StandardData[] stdDatas;
     private  ObjectMapper objectMapper;
     private GraphQL graphQL;
 
@@ -32,28 +31,39 @@ public class ResultCalculator implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
+        //resultat för standardkurva från instrument
+        // Innehåller position, koncentration, mätvärde
         String standardsDataVariable = execution.getVariable("standardsData").toString();
-        stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() {});
+        StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() {
+        });
+        //Gör ny standardkurva med värden från instrumentet
         StandardCurve stdCurve = new StandardCurve(stdDatas);
 
+        //resultat för prover från instrument
+        // Innehåller position, sampleId, provets namn, mätvärde
         String samplesDataVariable = execution.getVariable("samplesData").toString();
-        JSONArray samplesDataArray = new JSONArray(samplesDataVariable);
+        JSONArray samplesData = new JSONArray(samplesDataVariable);
 
-
+        //ELISA med tester hämtas från DB
         int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
-        String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,sample{id,name}}}}\"}";
+        String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}\"}";
         JSONObject response = graphQL.sendQuery(query);
-
+        //svaret innehåller en lista av ELISAs med en enda ELISA
         JSONObject elisaJson = response.getJSONObject("data").getJSONArray("elisas").getJSONObject(0);
         Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
-        for (Object sampleData : samplesDataArray){
-            var sampleJson = new JSONObject(sampleData.toString());
-            float measValue = sampleJson.getFloat("measValue");
-            float conc = stdCurve.calculateConc(measValue);
-            int sampleId = sampleJson.getInt("sampleId");
-            Test test = elisa.getTests().stream().filter(t -> t.getSampleId() == sampleId).findFirst().get();
-            test.setConcentration(conc);
+        //Ta fram rätt test från ELISAns lista mhja sampleId i sampleData från instrumentet
+        //Sätt testets sampleName och mätvärde till värden från instrument
+        // Beräkna koncentration för prov, ge koncentrationen till testet
+        for (Object sampleData : samplesData){
+            JSONObject sampleDataJson = (JSONObject) sampleData;
+            Test test = elisa.getTests().stream()
+                    .filter(t -> t.getSampleId() == sampleDataJson.getInt("sampleId"))
+                    .findFirst()
+                    .get();
+            test.setSampleName(sampleDataJson.getString("name"));
+            test.setMeasuredValue(sampleDataJson.getFloat("measValue"));
+            test.setConcentration(stdCurve.calculateConc(test.getMeasuredValue()));
         }
 
         ObjectValue elisaValue = Variables.objectValue(elisa)
@@ -62,5 +72,4 @@ public class ResultCalculator implements JavaDelegate {
 
         execution.setVariable("elisa", elisaValue);
     }
-
 }

@@ -1,11 +1,5 @@
 package com.example.workflow.models;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Locale;
-
 public class Test {
 
     private int id;
@@ -14,19 +8,19 @@ public class Test {
     private String sampleName;
     private float measuredValue;
     private float concentration;
-    private int platePosition;
+    private int elisaPlatePosition;
     private String status;
 
     public Test() {
     }
 
-    public Test(int id, int sampleId, String sampleName, int elisaId, int platePosition,
+    public Test(int id, int sampleId, String sampleName, int elisaId, int elisaPlatePosition,
                 String status) {
         this.id = id;
         this.sampleId = sampleId;
         this.sampleName = sampleName;
         this.elisaId = elisaId;
-        this.platePosition = platePosition;
+        this.elisaPlatePosition = elisaPlatePosition;
         this.status = status;
     }
 
@@ -36,7 +30,7 @@ public class Test {
         return id;
     }
 
-    public double getMeasuredValue() {
+    public float getMeasuredValue() {
         return measuredValue;
     }
 
@@ -44,7 +38,7 @@ public class Test {
         this.measuredValue = measuredValue;
     }
 
-    public double getConcentration() {
+    public float getConcentration() {
         return concentration;
     }
 
@@ -68,17 +62,17 @@ public class Test {
         return elisaId;
     }
 
-//    public void setPlatePosition(int platePosition) {
-//        this.platePosition = platePosition;
+//    public void setElisaPlatePosition(int elisaPlatePosition) {
+//        this.elisaPlatePosition = elisaPlatePosition;
 //    }
 
-    public int getPlatePosition() {
-        return platePosition;
+    public int getElisaPlatePosition() {
+        return elisaPlatePosition;
     }
 
-//    public void setSampleName(String sampleName) {
-//        this.sampleName = sampleName;
-//    }
+    public void setSampleName(String sampleName) {
+        this.sampleName = sampleName;
+    }
 
     public String getSampleName() {
         return sampleName;

@@ -16,18 +16,18 @@ public class GraphQL {
 
     public JSONObject sendQuery(String query) throws IOException, InterruptedException {
 
-        String q = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\\n\"}";
+        //String q = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\\n\"}";
 
-        HttpRequest addElisa = HttpRequest.newBuilder()
+        HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(LIMS_API_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(query))
                 .build();
 
-        HttpResponse<String> mutationResponse = client.send(addElisa, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        JSONObject responseJson = new JSONObject(mutationResponse.body());
+        JSONObject responseJson = new JSONObject(response.body());
 
-        return  responseJson;
+        return responseJson;
     }
 }

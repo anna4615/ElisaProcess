@@ -24,9 +24,14 @@ public class ExperimentInitializer implements  JavaDelegate{
 
     //private static final String LIMS_API_URL = "http://localhost:3627/graphql";
     private static final String LIMS_API_URL = "http://localhost:5000/graphql/";
-    private HttpClient client = HttpClient.newHttpClient();
+    private GraphQL graphQL;
+    private HttpClient client ;
     private int elisaId;
 
+    public ExperimentInitializer() {
+        this.graphQL = new GraphQL();
+        this.client= HttpClient.newHttpClient();
+    }
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
@@ -47,18 +52,9 @@ public class ExperimentInitializer implements  JavaDelegate{
     private int createElisa() throws IOException, InterruptedException {
 
         String query = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\\n\"}";
+        JSONObject response = graphQL.sendQuery(query);
 
-        HttpRequest addElisa = HttpRequest.newBuilder()
-                .uri(URI.create(LIMS_API_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(query))
-                .build();
-
-        HttpResponse<String> mutationResponse = client.send(addElisa, HttpResponse.BodyHandlers.ofString());
-
-        JSONObject responseJson = new JSONObject(mutationResponse.body());
-
-        int id = responseJson.getJSONObject("data")
+        int id = response.getJSONObject("data")
                 .getJSONObject("addElisa")
                 .getJSONObject("elisa")
                 .getInt("id");
@@ -87,26 +83,11 @@ public class ExperimentInitializer implements  JavaDelegate{
                                                             ",elisaId:" + elisaId +
                                                             ",elisaPlatePosition:" + position +
                                                             "}){test{id,sampleId,elisaId,elisaPlatePosition,status,dateAdded}}}\"}";
+        JSONObject response = graphQL.sendQuery(query);
 
-        HttpRequest addTest2 = HttpRequest.newBuilder()
-                .uri(URI.create(LIMS_API_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(query))
-                .build();
-
-        HttpResponse<String> mutationResponse = client.send(addTest2, HttpResponse.BodyHandlers.ofString());
-
-        JSONObject testJson = new JSONObject(mutationResponse.body())
-                .getJSONObject("data")
-                .getJSONObject("addTest")
-                .getJSONObject("test");
-
-//        //Så här hade man kunnat göra men det blir mer kod och jag tycker det är bättre säkerhet att sätta alla värden i
-//        //konstruktorn och ta bort alla setters
-//        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        Test test2 = objectMapper.readValue(testJson.toString(), new TypeReference<>() {});
-//        test2.setPlatePosition(position);
-//        test2.setSampleName(sampleName);
+        JSONObject testJson = response.getJSONObject("data")
+                                      .getJSONObject("addTest")
+                                      .getJSONObject("test");
 
         int id = testJson.getInt("id");
         String status = testJson.getString("status");

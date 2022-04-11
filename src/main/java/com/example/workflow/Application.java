@@ -32,32 +32,44 @@ public class Application {
 
     //ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    //TODO: hämtas från processvariabel
+//    //resultat för standardkurva från instrument
+//    // Innehåller position, koncentration, mätvärde
+//    //Gör ny standardkurva med värden från instrumentet
 //    String standardsDataVariable = "[{\"position\":73,\"concentration\":2.0,\"measValue\":0.11},{\"position\":74,\"concentration\":3.0,\"measValue\":0.165},{\"position\":75,\"concentration\":4.5,\"measValue\":0.247},{\"position\":76,\"concentration\":6.75,\"measValue\":0.371},{\"position\":77,\"concentration\":10.1,\"measValue\":0.556},{\"position\":78,\"concentration\":15.2,\"measValue\":0.835},{\"position\":79,\"concentration\":22.8,\"measValue\":1.252},{\"position\":80,\"concentration\":34.2,\"measValue\":1.879},{\"position\":81,\"concentration\":2.0,\"measValue\":0.12},{\"position\":82,\"concentration\":3.0,\"measValue\":0.175},{\"position\":83,\"concentration\":4.5,\"measValue\":0.257},{\"position\":84,\"concentration\":6.75,\"measValue\":0.381},{\"position\":85,\"concentration\":10.1,\"measValue\":0.566},{\"position\":86,\"concentration\":15.2,\"measValue\":0.845},{\"position\":87,\"concentration\":22.8,\"measValue\":1.262},{\"position\":88,\"concentration\":34.2,\"measValue\":1.889},{\"position\":89,\"concentration\":2.0,\"measValue\":0.08},{\"position\":90,\"concentration\":3.0,\"measValue\":0.135},{\"position\":91,\"concentration\":4.5,\"measValue\":0.217},{\"position\":92,\"concentration\":6.75,\"measValue\":0.341},{\"position\":93,\"concentration\":10.1,\"measValue\":0.526},{\"position\":94,\"concentration\":15.2,\"measValue\":0.805},{\"position\":95,\"concentration\":22.8,\"measValue\":1.222},{\"position\":96,\"concentration\":34.2,\"measValue\":1.849}]";
 //    StandardData[] stdData = objectMapper.readValue(standardsDataVariable, new TypeReference<>() {});
 //    StandardCurve stdCurve = new StandardCurve(stdData);
 
-    //TODO: hämtas från processvariabel
-//    String samplesDataVariable = "[{\"pos\":1,\"sampleId\":3,\"name\":\"Prov3\",\"measValue\":0.11},{\"pos\":2,\"sampleId\":4,\"name\":\"Prov4\",\"measValue\":0.17}]";
-//    JSONArray samplesDataArray = new JSONArray(samplesDataVariable);
+//    //resultat för prover från instrument
+//    // Innehåller position, sampleId, provets namn, mätvärde
+//    String samplesDataVariable = "[{\"pos\":1,\"sampleId\":3,\"name\":\"Prov3\",\"measValue\":0.53},{\"pos\":2,\"sampleId\":4,\"name\":\"Prov4\",\"measValue\":0.17}]";
+//    JSONArray samplesData = new JSONArray(samplesDataVariable);
 
-    //TODO: ElisaId hämtas från processvariabel
-    //int elisaId = 1152;
-    //String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,sample{id,name}}}}\"}";
-    //GraphQL graphQL = new GraphQL();
-    //JSONObject response = graphQL.sendQuery(query);
-
+//    //ELISA med tester hämtas från DB
+//    int elisaId = 1152;
+//    String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}\"}";
+//    GraphQL graphQL = new GraphQL();
+//    JSONObject response = graphQL.sendQuery(query);
+//
+//    //svaret innehåller en lista av ELISAs med en enda ELISA
 //    JSONObject elisaJson = response.getJSONObject("data").getJSONArray("elisas").getJSONObject(0);
 //    Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
-//    for (Object sampleData : samplesDataArray){
-//      var sampleJson = new JSONObject(sampleData.toString());
-//      float measValue = sampleJson.getFloat("measValue");
-//      float conc = stdCurve.calculateConc(measValue);
-//      int sampleId = sampleJson.getInt("sampleId");
+
+//    //Ta fram rätt test från ELISAns lista mhja sampleId i data från instrumentet
+//    //Sätt testets sampleName till värde från instrument
+//    // Beräkna koncentration för prov, ge koncentrationen och mätvärdet till rätt test i ELISA
+//    for (Object sampleData : samplesData){
+//      JSONObject sampleDataJson = (JSONObject) sampleData;
+//      int sampleId = sampleDataJson.getInt("sampleId");
 //      Test test = elisa.getTests().stream().filter(t -> t.getSampleId() == sampleId).findFirst().get();
+//      test.setSampleName(sampleDataJson.getString("name"));
+//      float measValue = sampleDataJson.getFloat("measValue");
+//      float conc = stdCurve.calculateConc(measValue);
+//      test.setMeasuredValue(measValue);
 //      test.setConcentration(conc);
 //    }
+
+
 
    // stdCurve.setStdDatas(new ArrayList<StandardData>());
 

@@ -37,7 +37,7 @@ public class Plate implements Serializable {
     private void addSamples(ArrayList<Test> tests) {
 
         for (Test test : tests){
-            wells.get(test.getPlatePosition() - 1).setReagent(test.getSampleName());
+            wells.get(test.getElisaPlatePosition() - 1).setReagent(test.getSampleName());
         }
     }
 

@@ -64,19 +64,4 @@ public class StandardCurve {
         float conc = (k * measValue) + m;
         return conc;
     }
-
-
-//    private void setTestStd(){
-//        int pos = 0;
-//        float conc = 2.0F;
-//        float value = (float) 0.11;
-//        for (int j = 0; j < 8; j++) {
-//            stdDatas[pos] = new StandardData(pos, conc, value);
-//            stdDatas[pos+8] = new StandardData(pos, conc, (value + 0.01F));
-//            stdDatas[pos+16] = new StandardData(pos, conc, (value - 0.03F));
-//            value *= 1.5;
-//            conc *= 1.5;
-//            pos++;
-//        }
-//    }
 }
