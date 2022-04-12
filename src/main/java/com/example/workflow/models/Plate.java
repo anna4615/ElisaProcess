@@ -11,11 +11,11 @@ public class Plate implements Serializable {
     public Plate() {
     }
 
-    public Plate(int elisaId, ArrayList<Test> tests) {
+    public Plate(int elisaId, float startConc, float dilution, ArrayList<Test> tests) {
         this.elisaId = elisaId;
         wells = new ArrayList<Well>();
         createEmptyPlate();
-        addStandards();
+        addStandards(startConc, dilution);
         addSamples(tests);
     }
 
@@ -42,12 +42,12 @@ public class Plate implements Serializable {
     }
 
 
-    private void addStandards(){
+    private void addStandards(float startConc, float dilution){
 
         int pos = 72;
 
         for (int i = 0; i < 3; i++) {
-            double conc = 0.25;
+            double conc = startConc;
             for (int j = 0; j < 8; j++) {
                 wells.get(pos).setReagent(conc + " ug\\ml");
                 conc*=2;

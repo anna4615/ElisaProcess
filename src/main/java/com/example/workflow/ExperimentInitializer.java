@@ -35,6 +35,7 @@ public class ExperimentInitializer implements  JavaDelegate{
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
+        //TODO: här bör det framgå att ELISAn sparas i DB
         elisaId = createElisa();
         execution.setVariable("elisaId", elisaId);
 
@@ -42,6 +43,7 @@ public class ExperimentInitializer implements  JavaDelegate{
         String[] samplesInput = ((String) execution.getVariable("samples")).split(";");
         //TODO: felhantering om fler än 72 prover, dvs samplesInput.length > 72
 
+        //TODO: här bör det framgå att testerna sparas i DB
         ArrayList<Test> testList = createTestList(samplesInput);
         String tests = JSON(testList).toString();
         execution.setVariable("tests", tests);

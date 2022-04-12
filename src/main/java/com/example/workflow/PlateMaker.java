@@ -29,7 +29,7 @@ public class PlateMaker implements JavaDelegate {
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ArrayList<Test> tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
 
-        Plate plate = new Plate(elisaId, tests);
+        Plate plate = new Plate(elisaId, 2.0F, 2.0F, tests);
 
         //TODO: skickas till UI
         ObjectValue plateValue = Variables.objectValue(plate)
