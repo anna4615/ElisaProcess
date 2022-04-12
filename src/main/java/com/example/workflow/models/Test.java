@@ -1,5 +1,8 @@
 package com.example.workflow.models;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Test {
 
     private int id;
@@ -8,22 +11,30 @@ public class Test {
     private String sampleName;
     private float measuredValue;
     private float concentration;
-    private int elisaPlatePosition;
+    private int platePosition;
     private String status;
 
+
     public Test() {
+
     }
 
-    public Test(int id, int sampleId, String sampleName, int elisaId, int elisaPlatePosition,
+    public Test(int id, int sampleId, String sampleName, int elisaId, int platePosition,
                 String status) {
         this.id = id;
         this.sampleId = sampleId;
         this.sampleName = sampleName;
         this.elisaId = elisaId;
-        this.elisaPlatePosition = elisaPlatePosition;
+        this.platePosition = platePosition;
         this.status = status;
     }
 
+    //https://www.baeldung.com/jackson-nested-values
+    @SuppressWarnings("unchecked")
+    @JsonProperty("sample")
+    private void unpackNested(java.util.Map<String,Object> sample) {
+        this.sampleName = (String) sample.get("name");
+    }
 
 
     public int getId() {
@@ -62,12 +73,13 @@ public class Test {
         return elisaId;
     }
 
-//    public void setElisaPlatePosition(int elisaPlatePosition) {
-//        this.elisaPlatePosition = elisaPlatePosition;
-//    }
+    public void setPlatePosition(int platePosition) {
+        this.platePosition = platePosition;
+    }
 
-    public int getElisaPlatePosition() {
-        return elisaPlatePosition;
+    @JsonAlias({"elisaPlatePosition", "platePosition"})
+    public int getPlatePosition() {
+        return platePosition;
     }
 
     public void setSampleName(String sampleName) {

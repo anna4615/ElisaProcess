@@ -12,7 +12,6 @@ import org.camunda.bpm.engine.variable.value.TypedValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,8 +33,7 @@ public class ResultCalculator implements JavaDelegate {
         //resultat för standardkurva från instrument
         // Innehåller position, koncentration, mätvärde
         String standardsDataVariable = execution.getVariable("standardsData").toString();
-        StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() {
-        });
+        StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() { });
         //Gör ny standardkurva med värden från instrumentet
         StandardCurve stdCurve = new StandardCurve(stdDatas);
 
@@ -53,7 +51,7 @@ public class ResultCalculator implements JavaDelegate {
         Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
         //Ta fram rätt test från ELISAns lista mhja sampleId i sampleData från instrumentet
-        //Sätt testets sampleName och mätvärde till värden från instrument
+        //Sätt mätvärde till värde från instrument
         // Beräkna koncentration för prov, ge koncentrationen till testet
         for (Object sampleData : samplesData){
             JSONObject sampleDataJson = (JSONObject) sampleData;
@@ -61,7 +59,6 @@ public class ResultCalculator implements JavaDelegate {
                     .filter(t -> t.getSampleId() == sampleDataJson.getInt("sampleId"))
                     .findFirst()
                     .get();
-            test.setSampleName(sampleDataJson.getString("name"));
             test.setMeasuredValue(sampleDataJson.getFloat("measValue"));
             test.setConcentration(stdCurve.calculateConc(test.getMeasuredValue()));
         }

@@ -23,7 +23,7 @@ import static org.camunda.spin.Spin.*;
 public class ExperimentInitializer implements  JavaDelegate{
 
     //private static final String LIMS_API_URL = "http://localhost:3627/graphql";
-    private static final String LIMS_API_URL = "http://localhost:5000/graphql/";
+    //private static final String LIMS_API_URL = "http://localhost:5000/graphql/";
     private GraphQL graphQL;
     private HttpClient client ;
     private int elisaId;
