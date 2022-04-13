@@ -1,4 +1,4 @@
-package com.example.workflow;
+package com.example.workflow.delegates;
 import com.example.workflow.models.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
