@@ -1,6 +1,9 @@
-package com.example.workflow.delegates;
+package com.example.workflow.Delegates;
 
-import com.example.workflow.models.*;
+import com.example.workflow.GraphQL;
+import com.example.workflow.Models.*;
+import com.example.workflow.Models.DaoModels.Elisa;
+import com.example.workflow.Models.DaoModels.Test;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,12 +11,10 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @Component("ResultCalculator")
 public class ResultCalculator implements JavaDelegate {

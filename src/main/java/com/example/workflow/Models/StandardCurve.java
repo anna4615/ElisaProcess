@@ -1,4 +1,4 @@
-package com.example.workflow.models;
+package com.example.workflow.Models;
 
 public class StandardCurve {
 
@@ -24,6 +24,7 @@ public class StandardCurve {
         return k;
     }
 
+    //Linjär regression:
     // y = kx + m -> conc = k*value + m
     // k = delta y / delta x -> k = delta conc / delta value
     // m = conc - k*value

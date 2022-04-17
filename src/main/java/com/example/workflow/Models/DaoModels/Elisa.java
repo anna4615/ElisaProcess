@@ -1,4 +1,4 @@
-package com.example.workflow.models;
+package com.example.workflow.Models.DaoModels;
 
 import java.io.Serializable;
 import java.util.ArrayList;

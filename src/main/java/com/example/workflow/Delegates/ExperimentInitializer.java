@@ -1,19 +1,12 @@
-package com.example.workflow.delegates;
-import com.example.workflow.models.*;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package com.example.workflow.Delegates;
+import com.example.workflow.GraphQL;
+import com.example.workflow.Models.DaoModels.Test;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.springframework.stereotype.Component;
 import org.json.*;
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 import static org.camunda.spin.Spin.*;
@@ -32,6 +25,7 @@ public class ExperimentInitializer implements  JavaDelegate{
         this.graphQL = new GraphQL();
         this.client= HttpClient.newHttpClient();
     }
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 

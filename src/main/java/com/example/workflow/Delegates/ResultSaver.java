@@ -1,4 +1,4 @@
-package com.example.workflow.delegates;
+package com.example.workflow.Delegates;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

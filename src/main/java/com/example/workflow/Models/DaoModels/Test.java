@@ -1,4 +1,4 @@
-package com.example.workflow.models;
+package com.example.workflow.Models.DaoModels;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
