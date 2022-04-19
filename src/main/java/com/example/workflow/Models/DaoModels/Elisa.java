@@ -12,14 +12,15 @@ public class Elisa implements Serializable{
     public Elisa() {
     }
 
-    public String getTestsForSaveResult(){
+    public String getTestsForSaveResult(String status){
 
         String s = "[";
 
         for (Test test : tests) {
              s+= "{id:" + test.getId();
              s+= ",concentration:" + test.getConcentration();
-             s+= ",measuredValue:" + test.getMeasuredValue() + "},";
+             s+= ",measuredValue:" + test.getMeasuredValue();
+             s+= ",status:" + status + "},";
         }
 
         s += "]";
