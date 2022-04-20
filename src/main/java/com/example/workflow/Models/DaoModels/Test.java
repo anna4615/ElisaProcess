@@ -3,7 +3,9 @@ package com.example.workflow.Models.DaoModels;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Test {
+import java.io.Serializable;
+
+public class Test implements Serializable {
 
     private int id;
     private int sampleId;
@@ -13,8 +15,6 @@ public class Test {
     private float concentration;
     private int platePosition;
     private String status;
-
-
 
 
     public Test() {

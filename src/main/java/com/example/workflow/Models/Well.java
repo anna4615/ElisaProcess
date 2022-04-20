@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class Well implements Serializable {
 
     private int pos;
-    private String wellName;
-    private String reagent;
+    private String wellName; //tex "A1"
+    private String reagent; // Provnamn eller koncentration för standard
 
     public Well(){
     }

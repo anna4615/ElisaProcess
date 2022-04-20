@@ -52,7 +52,7 @@ public class Plate implements Serializable {
             double conc = startConc;
             for (int j = 0; j < 8; j++) {
                 wells.get(pos).setReagent(conc + " ug\\ml");
-                conc*=2;
+                conc*=dilution;
                 pos++;
             }
         }

@@ -6,7 +6,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 import org.json.*;
 import java.io.IOException;
-import java.net.http.HttpClient;
 import java.util.ArrayList;
 
 import static org.camunda.spin.Spin.*;
@@ -15,15 +14,11 @@ import static org.camunda.spin.Spin.*;
 @Component("ExperimentInitializer")
 public class ExperimentInitializer implements  JavaDelegate{
 
-    //private static final String LIMS_API_URL = "http://localhost:3627/graphql";
-    //private static final String LIMS_API_URL = "http://localhost:5000/graphql/";
     private GraphQL graphQL;
-    private HttpClient client ;
     private int elisaId;
 
     public ExperimentInitializer() {
         this.graphQL = new GraphQL();
-        this.client= HttpClient.newHttpClient();
     }
 
     @Override
@@ -79,6 +74,7 @@ public class ExperimentInitializer implements  JavaDelegate{
                                                             ",elisaId:" + elisaId +
                                                             ",elisaPlatePosition:" + position +
                                                             "}){test{id,sampleId,elisaId,elisaPlatePosition,status,dateAdded}}}\"}";
+
         JSONObject response = graphQL.sendQuery(query);
 
         JSONObject testJson = response.getJSONObject("data")
