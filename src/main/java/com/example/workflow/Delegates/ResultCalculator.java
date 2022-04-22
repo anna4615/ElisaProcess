@@ -35,11 +35,13 @@ public class ResultCalculator implements JavaDelegate {
         // Innehåller position, koncentration, mätvärde
         String standardsDataVariable = execution.getVariable("standardsData").toString();
         StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() { });
+
         //Gör ny standardkurva med värden från instrumentet
         StandardCurve stdCurve = new StandardCurve(stdDatas);
 
-        //resultat för prover från instrument
-        // Innehåller position, sampleId, provets namn, mätvärde
+
+        //Rådata för prover från instrument
+        //Innehåller position, sampleId, provets namn, mätvärde
         String samplesDataVariable = execution.getVariable("samplesData").toString();
         JSONArray samplesData = new JSONArray(samplesDataVariable);
 
@@ -47,11 +49,12 @@ public class ResultCalculator implements JavaDelegate {
         int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
         String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}\"}";
         JSONObject response = graphQL.sendQuery(query);
+
         //svaret innehåller en lista av ELISAs med en enda ELISA
         JSONObject elisaJson = response.getJSONObject("data").getJSONArray("elisas").getJSONObject(0);
         Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
-        //Ta fram rätt test från ELISAns lista mhja sampleId i sampleData från instrumentet
+        //Ta fram rätt test från ELISAns testLista mhja sampleId i sampleData från instrumentet
         //Sätt mätvärde till värde från instrument
         // Beräkna koncentration för prov, ge koncentrationen till testet
         for (Object sampleData : samplesData){
@@ -60,8 +63,8 @@ public class ResultCalculator implements JavaDelegate {
                     .filter(t -> t.getSampleId() == sampleDataJson.getInt("sampleId"))
                     .findFirst()
                     .get();
-            test.setMeasuredValue(sampleDataJson.getFloat("measValue"));
-            test.setConcentration(stdCurve.calculateConc(test.getMeasuredValue()));
+            test.setMeasureValue(sampleDataJson.getFloat("measValue"));
+            test.setConcentration(stdCurve.calculateConc(test.getMeasureValue()));
         }
 
         ObjectValue elisaValue = Variables.objectValue(elisa)

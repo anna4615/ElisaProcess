@@ -11,7 +11,7 @@ public class Test implements Serializable {
     private int sampleId;
     private int elisaId;
     private String sampleName;
-    private float measuredValue;
+    private float measureValue;
     private float concentration;
     private int platePosition;
     private String status;
@@ -43,12 +43,12 @@ public class Test implements Serializable {
         return id;
     }
 
-    public float getMeasuredValue() {
-        return measuredValue;
+    public float getMeasureValue() {
+        return measureValue;
     }
 
-    public void setMeasuredValue(float measuredValue) {
-        this.measuredValue = measuredValue;
+    public void setMeasureValue(float measureValue) {
+        this.measureValue = measureValue;
     }
 
     public float getConcentration() {
@@ -91,4 +91,6 @@ public class Test implements Serializable {
     public String getSampleName() {
         return sampleName;
     }
+
+
 }

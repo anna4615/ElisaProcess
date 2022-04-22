@@ -10,6 +10,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import static org.camunda.spin.Spin.JSON;
@@ -22,6 +23,7 @@ public class ResultSaver implements JavaDelegate {
 
         TypedValue elisaVariable = execution.getVariableTyped("elisa");
         var elisa = (Elisa) elisaVariable.getValue();
+
         boolean experimentOkVariable = (boolean) execution.getVariable("experimentOk");
 
         String elisaStatus = null;
@@ -40,13 +42,20 @@ public class ResultSaver implements JavaDelegate {
                 "{id:" + elisa.getId() +
                 ",status:" + elisaStatus +
                 ",testInputs:" + elisa.getTestsForSaveResult(testStatus) +
-                "}){elisa{id,status,tests{concentration,sample{id,name}}}}}\"}";
+                "}){elisa{id,status,tests{status,measureValue,concentration,sample{id,name,concentration}}}}}\"}";
 
         GraphQL graphQL = new GraphQL();
-        graphQL.sendQuery(query);
+        JSONObject response = graphQL.sendQuery(query);
 
-        //TODO: uppdatera processvariabel "elisa" med värden sparade i db
-        // för att kunna visa slutgiltiga värden i UI
+        JSONObject elisaJson = response.getJSONObject("data").getJSONObject("saveElisaResult").getJSONObject("elisa");
 
+        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
+
+        ObjectValue elisaValue = Variables.objectValue(elisa)
+                .serializationDataFormat(Variables.SerializationDataFormats.JSON)
+                .create();
+
+        execution.setVariable("elisa", elisaValue);
     }
 }

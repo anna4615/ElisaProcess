@@ -28,7 +28,6 @@ public class ExperimentInitializer implements  JavaDelegate{
         elisaId = createElisa();
         execution.setVariable("elisaId", elisaId);
 
-        //String s = (String) execution.getVariable("samples");
         String[] samplesInput = ((String) execution.getVariable("samples")).split(";");
         //TODO: felhantering om fler än 72 prover, dvs samplesInput.length > 72
 
@@ -36,7 +35,6 @@ public class ExperimentInitializer implements  JavaDelegate{
         ArrayList<Test> testList = createTestList(samplesInput);
         String tests = JSON(testList).toString();
         execution.setVariable("tests", tests);
-
     }
 
 

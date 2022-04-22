@@ -19,7 +19,7 @@ public class Elisa implements Serializable{
         for (Test test : tests) {
              s+= "{id:" + test.getId();
              s+= ",concentration:" + test.getConcentration();
-             s+= ",measuredValue:" + test.getMeasuredValue();
+             s+= ",measureValue:" + test.getMeasureValue();
              s+= ",status:" + status + "},";
         }
 
@@ -42,5 +42,9 @@ public class Elisa implements Serializable{
 
     public void setTests(ArrayList<Test> tests) {
         this.tests = tests;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
