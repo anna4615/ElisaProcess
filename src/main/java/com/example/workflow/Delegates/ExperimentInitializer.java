@@ -3,6 +3,7 @@ import com.example.workflow.GraphQL;
 import com.example.workflow.Models.DaoModels.Test;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.springframework.stereotype.Component;
 import org.json.*;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class ExperimentInitializer implements  JavaDelegate{
         //TODO: här bör det framgå att ELISAn sparas i DB
         elisaId = createElisa();
         execution.setVariable("elisaId", elisaId);
+        execution.setProcessBusinessKey(String.valueOf(elisaId));
 
         String[] samplesInput = ((String) execution.getVariable("samples")).split(";");
         //TODO: felhantering om fler än 72 prover, dvs samplesInput.length > 72
