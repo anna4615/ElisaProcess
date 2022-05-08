@@ -22,7 +22,7 @@ public class ResultSaver implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
         TypedValue elisaVariable = execution.getVariableTyped("elisa");
-        var elisa = (Elisa) elisaVariable.getValue();
+        Elisa elisa = (Elisa) elisaVariable.getValue();
 
         boolean experimentOkVariable = (boolean) execution.getVariable("experimentOk");
 
@@ -42,7 +42,7 @@ public class ResultSaver implements JavaDelegate {
                 "{id:" + elisa.getId() +
                 ",status:" + elisaStatus +
                 ",testInputs:" + elisa.getTestsForSaveResult(testStatus) +
-                "}){elisa{id,status,tests{status,measureValue,concentration,sample{id,name,concentration}}}}}\"}";
+                "}){elisa{id,status,tests{id,elisaPlatePosition,sampleId,elisaId,status,measureValue,concentration,sample{id,name,concentration}}}}}\"}";
 
         GraphQL graphQL = new GraphQL();
         JSONObject response = graphQL.sendQuery(query);

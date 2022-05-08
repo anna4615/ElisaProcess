@@ -18,7 +18,6 @@
         <bpmn:flowNodeRef>Activity_0efy3yi</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_07rgh1t</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1487xdy</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1krkq07</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1g5h63f</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_0x6ir2l</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_18z6gyo</bpmn:flowNodeRef>
@@ -42,19 +41,15 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not experimentOk}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_105dza2" sourceRef="Activity_0efy3yi" targetRef="Gateway_07rgh1t" />
-    <bpmn:sequenceFlow id="Flow_1wimoeo" name="Nej" sourceRef="Gateway_07rgh1t" targetRef="Activity_1krkq07">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not redo}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1kvh7fa" name="Ja" sourceRef="Gateway_1487xdy" targetRef="Activity_1g5h63f">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{experimentOk}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1pcvqmo" sourceRef="Activity_1krkq07" targetRef="Activity_0q3hlex" />
     <bpmn:sequenceFlow id="Flow_1pu3e1e" sourceRef="Activity_1g5h63f" targetRef="Activity_18z6gyo" />
     <bpmn:sequenceFlow id="Flow_1j77zvg" sourceRef="Event_1wdf24a" targetRef="Gateway_1487xdy" />
     <bpmn:sequenceFlow id="Flow_0gq1qmq" sourceRef="Activity_18z6gyo" targetRef="EndEvent_0x6ir2l" />
     <bpmn:sequenceFlow id="Flow_0yys2hj" sourceRef="Activity_0q3hlex" targetRef="EndEvent_0x6ir2l" />
     <bpmn:userTask id="Activity_0q3hlex" name="Se sparat resultat">
-      <bpmn:incoming>Flow_1pcvqmo</bpmn:incoming>
+      <bpmn:incoming>Flow_028aim7</bpmn:incoming>
       <bpmn:outgoing>Flow_0yys2hj</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_18z6gyo" name="Se sparat resultat">
@@ -65,13 +60,9 @@
       <bpmn:incoming>Flow_0gq1qmq</bpmn:incoming>
       <bpmn:incoming>Flow_0yys2hj</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1g5h63f" name="Spara provernas koncentration + status &#34;Done&#34; för proverna och experimentet" camunda:delegateExpression="${ResultSaver}">
+    <bpmn:serviceTask id="Activity_1g5h63f" name="Spara provernas koncentration + status &#34;Approved&#34; för testerna och experimentet" camunda:delegateExpression="${ResultSaver}">
       <bpmn:incoming>Flow_1kvh7fa</bpmn:incoming>
       <bpmn:outgoing>Flow_1pu3e1e</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1krkq07" name="Spara status &#34;Fail&#34; för proverna." camunda:delegateExpression="${ResultSaver}">
-      <bpmn:incoming>Flow_1wimoeo</bpmn:incoming>
-      <bpmn:outgoing>Flow_1pcvqmo</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_1487xdy" name="Experimentet OK?">
       <bpmn:incoming>Flow_1j77zvg</bpmn:incoming>
@@ -81,9 +72,9 @@
     <bpmn:exclusiveGateway id="Gateway_07rgh1t" name="Kör om experimentet?">
       <bpmn:incoming>Flow_105dza2</bpmn:incoming>
       <bpmn:outgoing>Flow_10cvk8j</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1wimoeo</bpmn:outgoing>
+      <bpmn:outgoing>Flow_028aim7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0efy3yi" name="Spara status &#34;Fail&#34; för experimentet" camunda:delegateExpression="${ResultSaver}">
+    <bpmn:serviceTask id="Activity_0efy3yi" name="Spara status &#34;Fail&#34; för testerna och experimentet" camunda:delegateExpression="${ResultSaver}">
       <bpmn:incoming>Flow_1lzto5b</bpmn:incoming>
       <bpmn:outgoing>Flow_105dza2</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -128,6 +119,9 @@
       <bpmn:incoming>SequenceFlow_16gzt2m</bpmn:incoming>
       <bpmn:outgoing>Flow_07i1jie</bpmn:outgoing>
     </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_028aim7" name="Nej" sourceRef="Gateway_07rgh1t" targetRef="Activity_0q3hlex">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not redo}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:textAnnotation id="TextAnnotation_03wgwrb">
       <bpmn:text>GraphQL anrop till microtjänst Data Access</bpmn:text>
     </bpmn:textAnnotation>
@@ -144,7 +138,6 @@
       <bpmn:text>GraphQL anrop till microtjänst Data Access</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0gg09kk" sourceRef="Activity_1g5h63f" targetRef="TextAnnotation_03wgwrb" />
-    <bpmn:association id="Association_1gaqcup" sourceRef="TextAnnotation_03wgwrb" targetRef="Activity_1krkq07" />
     <bpmn:association id="Association_1ya2uz2" sourceRef="TextAnnotation_03wgwrb" targetRef="Activity_0efy3yi" />
     <bpmn:association id="Association_1jea046" sourceRef="StartEvent_1" targetRef="TextAnnotation_0vx8tb8" />
     <bpmn:association id="Association_1hfkgno" sourceRef="Activity_0kqwmyq" targetRef="TextAnnotation_0e3rx0z" />
@@ -197,22 +190,11 @@
         <di:waypoint x="1707" y="400" />
         <di:waypoint x="1790" y="400" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pcvqmo_di" bpmnElement="Flow_1pcvqmo">
-        <di:waypoint x="1707" y="660" />
-        <di:waypoint x="1800" y="660" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kvh7fa_di" bpmnElement="Flow_1kvh7fa">
         <di:waypoint x="1522" y="400" />
         <di:waypoint x="1607" y="400" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1537" y="382" width="12" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wimoeo_di" bpmnElement="Flow_1wimoeo">
-        <di:waypoint x="1522" y="660" />
-        <di:waypoint x="1607" y="660" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1534" y="642" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_105dza2_di" bpmnElement="Flow_105dza2">
@@ -258,6 +240,13 @@
           <dc:Bounds x="1400" y="642" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_028aim7_di" bpmnElement="Flow_028aim7">
+        <di:waypoint x="1522" y="660" />
+        <di:waypoint x="1800" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1581" y="642" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1dy8eor_di" bpmnElement="Activity_0q3hlex">
         <dc:Bounds x="1800" y="620" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -272,9 +261,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1wbvjiy_di" bpmnElement="Activity_1g5h63f">
         <dc:Bounds x="1607" y="360" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19pacnm_di" bpmnElement="Activity_1krkq07">
-        <dc:Bounds x="1607" y="620" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1487xdy_di" bpmnElement="Gateway_1487xdy" isMarkerVisible="true">
         <dc:Bounds x="1472" y="375" width="50" height="50" />
@@ -345,10 +331,6 @@
       <bpmndi:BPMNEdge id="Association_0gg09kk_di" bpmnElement="Association_0gg09kk">
         <di:waypoint x="1675" y="440" />
         <di:waypoint x="1703" y="503" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1gaqcup_di" bpmnElement="Association_1gaqcup">
-        <di:waypoint x="1697" y="557" />
-        <di:waypoint x="1664" y="620" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1ya2uz2_di" bpmnElement="Association_1ya2uz2">
         <di:waypoint x="1657" y="530" />
