@@ -47,11 +47,11 @@ public class ResultCalculator implements JavaDelegate {
 
         //ELISA med tester hämtas från DB
         int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
-        String query = "{\"query\":\"query{elisas(where:{id:{eq:" + elisaId + "}}){id,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}\"}";
+
+        String query = "{\"query\":\"mutation{updateElisaStatus(elisaId:" + elisaId + ",status:\\\"In Review\\\"){elisa{id,status,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}}\"}";
         JSONObject response = graphQL.sendQuery(query);
 
-        //svaret innehåller en lista av ELISAs med en enda ELISA
-        JSONObject elisaJson = response.getJSONObject("data").getJSONArray("elisas").getJSONObject(0);
+        JSONObject elisaJson = response.getJSONObject("data").getJSONObject("updateElisaStatus").getJSONObject("elisa");
         Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
         //Ta fram rätt test från ELISAns testLista mhja sampleId i sampleData från instrumentet

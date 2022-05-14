@@ -26,6 +26,16 @@ public class Application {
 //    String elisaVariable = "{\"id\":1188,\"tests\":[{\"id\":1310,\"sampleId\":3,\"elisaId\":1188,\"sampleName\":\"Prov3\",\"measureValue\":0.57,\"concentration\":110.32257,\"platePosition\":1,\"status\":\"In Progress\"},{\"id\":1311,\"sampleId\":4,\"elisaId\":1188,\"sampleName\":\"Prov4\",\"measureValue\":0.17,\"concentration\":32.903225,\"platePosition\":2,\"status\":\"In Progress\"}]}";
 //    boolean experimentOkVariable = false;
 
+//    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//    GraphQL graphQL = new GraphQL();
+//    int id = 37;
+//
+//    String query = "{\"query\":\"mutation{updateElisaStatus(elisaId:" + id + ",status:\\\"In Review\\\"){elisa{id,status,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}}\"}";
+//    JSONObject response = graphQL.sendQuery(query);
+//
+//    JSONObject elisaJson = response.getJSONObject("data").getJSONObject("updateElisaStatus").getJSONObject("elisa");
+//    Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
+
   }
 }
 

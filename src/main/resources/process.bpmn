@@ -100,7 +100,7 @@
       <bpmn:outgoing>Flow_1gfwaky</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0u8wcyd" messageRef="Message_1sjf6nz" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Activity_1r3z8dl" name="Beräkna koncentrationer" camunda:delegateExpression="${ResultCalculator}">
+    <bpmn:serviceTask id="Activity_1r3z8dl" name="Beräkna koncentrationer + Spara status &#34;In Review&#34; för Elisa och tester" camunda:delegateExpression="${ResultCalculator}">
       <bpmn:incoming>Flow_1gfwaky</bpmn:incoming>
       <bpmn:outgoing>Flow_0k7zttn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -158,6 +158,13 @@
       <bpmndi:BPMNShape id="Lane_0zpblka_di" bpmnElement="Lane_0zpblka" isHorizontal="true">
         <dc:Bounds x="190" y="294" width="1887" height="476" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_028aim7_di" bpmnElement="Flow_028aim7">
+        <di:waypoint x="1522" y="660" />
+        <di:waypoint x="1800" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1581" y="642" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0lrwwwg_di" bpmnElement="Flow_0lrwwwg">
         <di:waypoint x="1300" y="180" />
         <di:waypoint x="1331" y="180" />
@@ -238,13 +245,6 @@
         <di:waypoint x="420" y="440" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1400" y="642" width="12" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_028aim7_di" bpmnElement="Flow_028aim7">
-        <di:waypoint x="1522" y="660" />
-        <di:waypoint x="1800" y="660" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1581" y="642" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1dy8eor_di" bpmnElement="Activity_0q3hlex">
