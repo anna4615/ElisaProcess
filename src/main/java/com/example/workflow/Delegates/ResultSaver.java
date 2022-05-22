@@ -19,12 +19,12 @@ import static org.camunda.spin.Spin.JSON;
 public class ResultSaver implements JavaDelegate {
 
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution delegateExecution) throws Exception {
 
-        TypedValue elisaVariable = execution.getVariableTyped("elisa");
+        TypedValue elisaVariable = delegateExecution.getVariableTyped("elisa");
         Elisa elisa = (Elisa) elisaVariable.getValue();
 
-        boolean experimentOkVariable = (boolean) execution.getVariable("experimentOk");
+        boolean experimentOkVariable = (boolean) delegateExecution.getVariable("experimentOk");
 
         String elisaStatus = null;
         String testStatus = null;
@@ -56,6 +56,6 @@ public class ResultSaver implements JavaDelegate {
                 .serializationDataFormat(Variables.SerializationDataFormats.JSON)
                 .create();
 
-        execution.setVariable("elisa", elisaValue);
+        delegateExecution.setVariable("elisa", elisaValue);
     }
 }

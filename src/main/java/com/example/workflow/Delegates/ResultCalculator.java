@@ -4,6 +4,7 @@ import com.example.workflow.GraphQL;
 import com.example.workflow.Models.*;
 import com.example.workflow.Models.DaoModels.Elisa;
 import com.example.workflow.Models.DaoModels.Test;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,8 @@ import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Component("ResultCalculator")
@@ -22,6 +25,8 @@ public class ResultCalculator implements JavaDelegate {
     private ArrayList<Test> tests;
     private  ObjectMapper objectMapper;
     private GraphQL graphQL;
+    private Elisa elisa;
+    private StandardCurve stdCurve;
 
     public ResultCalculator() {
         this.objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -29,34 +34,64 @@ public class ResultCalculator implements JavaDelegate {
     }
 
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution delegateExecution) throws Exception {
 
-        //resultat för standardkurva från instrument
-        // Innehåller position, koncentration, mätvärde
-        String standardsDataVariable = execution.getVariable("standardsData").toString();
-        StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() { });
+        //Hämta processvariabel elisaId
+        int elisaId = Integer.parseInt(delegateExecution.getVariable("elisaId").toString());
 
-        //Gör ny standardkurva med värden från instrumentet
-        StandardCurve stdCurve = new StandardCurve(stdDatas);
+        elisa = updateElisaStatus(elisaId);
+
+        //Hämta processvariabel med rådata för standardkurva, innehåller position, koncentration, mätvärde
+        String standardsDataVariable = delegateExecution.getVariable("standardsData").toString();
+
+        stdCurve = calculateStandardCurve(standardsDataVariable);
+
+        //Hämta processvariabel med rådata för prover, innehåller position, sampleId, provets namn, mätvärde
+        String samplesDataVariable = delegateExecution.getVariable("samplesData").toString();
+
+        setConcAndMeasValueForElisaTests(samplesDataVariable);
+
+        //Gör elisa till ett Camunda-objekt
+        ObjectValue elisaObject = Variables.objectValue(elisa)
+                .serializationDataFormat(Variables.SerializationDataFormats.JSON)
+                .create();
+
+        //Spara Elisan med beräknat resultat i processvariabel "elisa"
+        delegateExecution.setVariable("elisa", elisaObject);
+    }
+    
 
 
-        //Rådata för prover från instrument
-        //Innehåller position, sampleId, provets namn, mätvärde
-        String samplesDataVariable = execution.getVariable("samplesData").toString();
-        JSONArray samplesData = new JSONArray(samplesDataVariable);
+    private Elisa updateElisaStatus(int elisaId) throws IOException, InterruptedException {
 
-        //ELISA med tester hämtas från DB
-        int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
-
+        //ELISAns status uppdateras i databasen, svaret innehåller ELISAn och dess tester.
         String query = "{\"query\":\"mutation{updateElisaStatus(elisaId:" + elisaId + ",status:\\\"In Review\\\"){elisa{id,status,tests{id,sampleId,elisaId,elisaPlatePosition,status,sample{id,name}}}}}\"}";
         JSONObject response = graphQL.sendQuery(query);
 
         JSONObject elisaJson = response.getJSONObject("data").getJSONObject("updateElisaStatus").getJSONObject("elisa");
         Elisa elisa = objectMapper.readValue(elisaJson.toString(), new TypeReference<>() {});
 
-        //Ta fram rätt test från ELISAns testLista mhja sampleId i sampleData från instrumentet
+        return elisa;
+    }
+
+
+    private StandardCurve calculateStandardCurve(String standardsDataVariable) throws JsonProcessingException {
+
+        StandardData[] stdDatas = objectMapper.readValue(standardsDataVariable, new TypeReference<>() { });
+
+        //Gör ny standardkurva med värden från instrumentet
+        StandardCurve stdCurve = new StandardCurve(stdDatas);
+
+        return stdCurve;
+    }
+
+    private void setConcAndMeasValueForElisaTests(String samplesDataVariable){
+
+        JSONArray samplesData = new JSONArray(samplesDataVariable);
+
+        //Ta fram rätt test från ELISAns testLista mhja sampleId i samplesData
         //Sätt mätvärde till värde från instrument
-        // Beräkna koncentration för prov, ge koncentrationen till testet
+        // Beräkna koncentrationen, ge koncentrationen till testet
         for (Object sampleData : samplesData){
             JSONObject sampleDataJson = (JSONObject) sampleData;
             Test test = elisa.getTests().stream()
@@ -66,11 +101,5 @@ public class ResultCalculator implements JavaDelegate {
             test.setMeasureValue(sampleDataJson.getFloat("measValue"));
             test.setConcentration(stdCurve.calculateConc(test.getMeasureValue()));
         }
-
-        ObjectValue elisaValue = Variables.objectValue(elisa)
-                .serializationDataFormat(Variables.SerializationDataFormats.JSON)
-                .create();
-
-        execution.setVariable("elisa", elisaValue);
     }
 }

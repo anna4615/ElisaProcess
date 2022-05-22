@@ -18,12 +18,12 @@ import java.util.ArrayList;
 public class PlateMaker implements JavaDelegate {
 
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution delegateExecution) throws Exception {
 
-        int elisaId = Integer.parseInt(execution.getVariable("elisaId").toString());
+        int elisaId = Integer.parseInt(delegateExecution.getVariable("elisaId").toString());
 
         //TODO: använd getVariableTyped istället -> objectMapper behövs inte
-        String testsVariable = execution.getVariable("tests").toString();
+        String testsVariable = delegateExecution.getVariable("tests").toString();
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ArrayList<Test> tests = objectMapper.readValue(testsVariable, new TypeReference<>() {});
 
@@ -33,6 +33,6 @@ public class PlateMaker implements JavaDelegate {
                 .serializationDataFormat(Variables.SerializationDataFormats.JSON)
                 .create();
 
-        execution.setVariable("plate", plateValue);
+        delegateExecution.setVariable("plate", plateValue);
     }
 }

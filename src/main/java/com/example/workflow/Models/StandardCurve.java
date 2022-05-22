@@ -12,43 +12,12 @@ public class StandardCurve {
         this.stdDatas = stdDatas;
         this.concentrations =  new float[8];
         this.aveMeasValues = new float[8];
-        calculateAverageMeasValues();
+        setValuesForConcAndAveMeasValue();
         setKAndM();
     }
 
-    public StandardData[] getStdDatas() {
-        return stdDatas;
-    }
 
-    public float getK() {
-        return k;
-    }
-
-    //Linjär regression:
-    // y = kx + m -> conc = k*value + m
-    // k = delta y / delta x -> k = delta conc / delta value
-    // m = conc - k*value
-    // beräknar k och m för vardera steg i std-kurvan, tar sedan medelvärdet
-    public void setKAndM() {
-        float tempK = 0.0F;
-        for (int i = 0; i < 7; i++) {
-            float deltaConc = concentrations[i + 1] - concentrations[i];
-            float deltaValue = aveMeasValues[i + 1] - aveMeasValues[i];
-            tempK = (deltaConc / deltaValue);
-            k+= tempK;
-            m+= concentrations[i] - (tempK * aveMeasValues[i]);
-        }
-        k /= 7;
-        m /= 7;
-    }
-
-    public double getM() {
-        return m;
-    }
-
-
-    public void calculateAverageMeasValues(){
-
+    public void setValuesForConcAndAveMeasValue(){
         for (int i = 0; i < 8; i++) {
             float value1 = stdDatas[i].getMeasValue();
             float value2 = stdDatas[i + 8].getMeasValue();
@@ -59,10 +28,42 @@ public class StandardCurve {
         }
     }
 
-    // y = kx + m -> conc = k*value + m
+    //Linjär regression:
+    // y = kx + m -> conc = k*measValue + m
+    // k = delta y / delta x -> k = delta conc / delta measValue
+    // m = conc - k*measValue
+    // beräknar k och m för vardera steg i std-kurvan, tar sedan medelvärdet
+    public void setKAndM() {
+        float tempK = 0.0F;
+        for (int i = 0; i < 7; i++) {
+            float deltaConc = concentrations[i + 1] - concentrations[i];
+            float deltaMeasValue = aveMeasValues[i + 1] - aveMeasValues[i];
+            tempK = (deltaConc / deltaMeasValue);
+            k+= tempK;
+            m+= concentrations[i] - (tempK * aveMeasValues[i]);
+        }
+        k /= 7;
+        m /= 7;
+    }
+
+    // y = kx + m -> conc = k*measValue + m
     public float calculateConc(float measValue){
 
         float conc = (k * measValue) + m;
         return conc;
+    }
+
+
+
+
+    public StandardData[] getStdDatas() {
+        return stdDatas;
+    }
+
+    public float getK() {
+        return k;
+    }
+    public double getM() {
+        return m;
     }
 }
