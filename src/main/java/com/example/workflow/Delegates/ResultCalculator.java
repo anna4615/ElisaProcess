@@ -39,17 +39,18 @@ public class ResultCalculator implements JavaDelegate {
         //Hämta processvariabel elisaId
         int elisaId = Integer.parseInt(delegateExecution.getVariable("elisaId").toString());
 
+        //Spara ny status för Elisan med GraphQL-anrop till API för datahantering, svaret innehåller Elisan med tester
         elisa = updateElisaStatus(elisaId);
 
         //Hämta processvariabel med rådata för standardkurva, innehåller position, koncentration, mätvärde
-        String standardsDataVariable = delegateExecution.getVariable("standardsData").toString();
+        String standardsRawData = delegateExecution.getVariable("standardsData").toString();
 
-        stdCurve = calculateStandardCurve(standardsDataVariable);
+        stdCurve = calculateStandardCurve(standardsRawData);
 
         //Hämta processvariabel med rådata för prover, innehåller position, sampleId, provets namn, mätvärde
-        String samplesDataVariable = delegateExecution.getVariable("samplesData").toString();
+        String samplesRawData = delegateExecution.getVariable("samplesData").toString();
 
-        setConcAndMeasValueForElisaTests(samplesDataVariable);
+        setConcAndMeasValueForElisaTests(samplesRawData);
 
         //Gör elisa till ett Camunda-objekt
         ObjectValue elisaObject = Variables.objectValue(elisa)
@@ -59,7 +60,7 @@ public class ResultCalculator implements JavaDelegate {
         //Spara Elisan med beräknat resultat i processvariabel "elisa"
         delegateExecution.setVariable("elisa", elisaObject);
     }
-    
+
 
 
     private Elisa updateElisaStatus(int elisaId) throws IOException, InterruptedException {
@@ -85,20 +86,23 @@ public class ResultCalculator implements JavaDelegate {
         return stdCurve;
     }
 
-    private void setConcAndMeasValueForElisaTests(String samplesDataVariable){
 
-        JSONArray samplesData = new JSONArray(samplesDataVariable);
+    private void setConcAndMeasValueForElisaTests(String samplesRawData){
 
-        //Ta fram rätt test från ELISAns testLista mhja sampleId i samplesData
+        JSONArray samplesRawDataArray = new JSONArray(samplesRawData);
+
+        //Ta fram rätt test från ELISAns testLista mhja sampleId i rådata från mätinstrumentet
         //Sätt mätvärde till värde från instrument
         // Beräkna koncentrationen, ge koncentrationen till testet
-        for (Object sampleData : samplesData){
-            JSONObject sampleDataJson = (JSONObject) sampleData;
+        for (Object sampleRawDataOject : samplesRawDataArray){
+            JSONObject rawData = (JSONObject) sampleRawDataOject;
+
             Test test = elisa.getTests().stream()
-                    .filter(t -> t.getSampleId() == sampleDataJson.getInt("sampleId"))
+                    .filter(t -> t.getSampleId() == rawData.getInt("sampleId"))
                     .findFirst()
                     .get();
-            test.setMeasureValue(sampleDataJson.getFloat("measValue"));
+
+            test.setMeasureValue(rawData.getFloat("measValue"));
             test.setConcentration(stdCurve.calculateConc(test.getMeasureValue()));
         }
     }
