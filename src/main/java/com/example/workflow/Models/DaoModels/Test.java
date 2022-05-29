@@ -18,7 +18,6 @@ public class Test implements Serializable {
 
 
     public Test() {
-
     }
 
     public Test(int id, int sampleId, String sampleName, int elisaId, int platePosition,

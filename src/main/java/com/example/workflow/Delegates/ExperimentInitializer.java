@@ -42,7 +42,7 @@ public class ExperimentInitializer implements  JavaDelegate{
 
     private int createElisa() throws IOException, InterruptedException {
 
-        String query = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\\n\"}";
+        String query = "{\"query\":\"mutation{addElisa{elisa{id,status,dateAdded}}}\"}";
         JSONObject response = graphQL.sendQuery(query);
 
         int id = response.getJSONObject("data")

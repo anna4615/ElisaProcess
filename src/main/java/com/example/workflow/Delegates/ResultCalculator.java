@@ -52,12 +52,12 @@ public class ResultCalculator implements JavaDelegate {
 
         setConcAndMeasValueForElisaTests(samplesRawData);
 
-        //Gör elisa till ett Camunda-objekt
+        //Gör elisa till ett objekt som kan sparas i processen.
         ObjectValue elisaObject = Variables.objectValue(elisa)
                 .serializationDataFormat(Variables.SerializationDataFormats.JSON)
                 .create();
 
-        //Spara Elisan med beräknat resultat i processvariabel "elisa"
+        //Spara Elisan med beräknat resultat som processvariabel "elisa".
         delegateExecution.setVariable("elisa", elisaObject);
     }
 

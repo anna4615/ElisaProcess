@@ -29,8 +29,8 @@ public class StandardCurve {
     }
 
     //Linjär regression:
-    // y = kx + m -> conc = k*measValue + m
-    // k = delta y / delta x -> k = delta conc / delta measValue
+    // y = kx + m  ->  conc = k*measValue + m
+    // k = delta y / delta x  ->  k = delta conc / delta measValue
     // m = conc - k*measValue
     // beräknar k och m för vardera steg i std-kurvan, tar sedan medelvärdet
     public void setKAndM() {
